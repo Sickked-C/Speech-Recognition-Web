@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyển giọng nói thành văn bản</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #1c1c3a;
+        }
+        nav {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 1.1rem;
+            color: white;
+            z-index:20;
+        }
+        nav a {
+            color: #ff6b6b;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #ee5253;
+        }
+        #recording-icon {
+            display: none; /* Mặc định ẩn */
+            margin-top: 10px;
+            margin-bottom:10px;
+            font-size: 1.5rem;
+            color: red;
+            text-align: center;
+            animation: recording-animation 1s infinite;
+        }
+
+        @keyframes recording-animation {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 100%;
+            z-index: 10;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 2rem;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+        select, input[type="file"], button {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #ee5253;
+        }
+        .note {
+            font-size: 0.9rem;
+            color: #888;
+        }
+        hr {
+            border: none;
+            height: 1px;
+            background-color: #ddd;
+            margin: 1.5rem 0;
+        }
+        .background {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: float 8s infinite ease-in-out;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        .circle:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 80%; animation-duration: 10s; animation-delay: 1s; }
+        .circle:nth-child(2) { width: 250px; height: 250px; top: 70%; left: 10%; animation-duration: 12s; animation-delay: 0.5s; }
+        .circle:nth-child(3) { width: 200px; height: 200px; top: 40%; left: 50%; animation-duration: 15s; animation-delay: 2s; }
+        .circle:nth-child(4) { width: 150px; height: 150px; top: 85%; left: 70%; animation-duration: 18s; animation-delay: 3s; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Trang chủ</a> |
+        <a href="/history/">Lịch sử</a>
+    </nav>
+
+    <div class="background">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+
+    <div class="container">
+        <h1>Chuyển giọng nói thành văn bản</h1>
+
+        <form method="post" action="{% url 'process_audio' %}">
+            {% csrf_token %}
+            <label for="language">Chọn ngôn ngữ:</label>
+            <select id="language" name="language">
+                <option value="vi">Tiếng Việt</option>
+                <option value="en">Tiếng Anh</option>
+            </select>
+            <div id="recording-icon">🔴 Đang ghi âm</div>
+            <button type="submit" onclick="startRecording()">Ghi âm</button>
+        </form>
+        <hr>
+
+        <form method="post" enctype="multipart/form-data" action="{% url 'process_audio_file' %}">
+            {% csrf_token %}
+            <label for="audio_file">Chọn file âm thanh:</label>
+            <input type="file" id="audio_file" name="audio_file" accept=".wav, .mp3" required style="width:94%">
+            <label for="language">Chọn ngôn ngữ:</label>
+            <select id="language" name="language">
+                <option value="vi">Tiếng Việt</option>
+                <option value="en">Tiếng Anh</option>
+            </select>
+            <button type="submit">Dự đoán từ file</button>
+        </form>
+
+        <p class="note">Chỉ hỗ trợ các định dạng .wav và .mp3</p>
+    </div>
+
+    <script>
+        function startRecording() {
+            document.getElementById('recording-icon').style.display = 'block';
+            // Hiện thị nút ghi âm với hiệu ứng
+            setTimeout(function() {
+                document.getElementById('recording-icon').style.display = 'none';
+            }, 10000); // Ẩn sau 5 giây (hoặc khi ghi âm kết thúc)
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch sử chuyển đổi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1c1c3a;
+            color: white;
+            margin: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background-color: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        h1 {
+            text-align: center;
+            color: #ff6b6b;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            color: #ddd;
+        }
+        th {
+            background-color: #444;
+            color: #ff6b6b;
+        }
+        tr:nth-child(even) {
+            background-color: #555;
+        }
+        a {
+            color: #ff6b6b;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ee5253;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #ff6b6b;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background-color: #ee5253;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lịch sử chuyển đổi</h1>
+        <table>
+            <tr>
+                <th>Kết quả chuyển đổi</th>
+                <th>Ngày tạo</th>
+            </tr>
+            {% for record in history %}
+            <tr>
+                <td>{{ record.transcription }}</td>
+                <td>{{ record.created_at }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align:center;">Không có dữ liệu lịch sử</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="/" class="back-btn">Quay lại trang chủ</a>
+    </div>
+</body>
+</html>

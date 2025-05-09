@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết quả nhận diện</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #1c1c3a;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+        h1 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+        p {
+            font-size: 1.2rem;
+            color: #555;
+            background-color: #f9fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        h2 {
+            color: #555;
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+        }
+        audio {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+        a {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        /* 3D Background effect */
+        .background {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 80%;
+            animation-duration: 10s;
+            animation-delay: 1s;
+        }
+        .circle:nth-child(2) {
+            width: 250px;
+            height: 250px;
+            top: 70%;
+            left: 10%;
+            animation-duration: 12s;
+            animation-delay: 0.5s;
+        }
+        .circle:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            top: 40%;
+            left: 50%;
+            animation-duration: 15s;
+            animation-delay: 2s;
+        }
+        .circle:nth-child(4) {
+            width: 150px;
+            height: 150px;
+            top: 85%;
+            left: 70%;
+            animation-duration: 18s;
+            animation-delay: 3s;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 3D Background -->
+    <div class="background">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+
+    <div class="container">
+        <h1>Kết quả nhận diện giọng nói</h1>
+
+        <!-- Hiển thị kết quả nhận diện -->
+        <p>{{ transcription }}</p>
+
+        <!-- Phát lại âm thanh đã xử lý -->
+        <h2>Phát lại âm thanh đã xử lý:</h2>
+        <audio controls>
+            <source src="{{ audio_url }}" type="audio/wav">
+            Trình duyệt của bạn không hỗ trợ phát âm thanh.
+        </audio>
+
+        <!-- Nút quay lại trang chủ -->
+        <a href="/">Quay lại trang chủ</a>
+    </div>
+
+</body>
+</html>
