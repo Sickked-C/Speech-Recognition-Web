@@ -93,11 +93,13 @@
         <table>
             <tr>
                 <th>Kết quả chuyển đổi</th>
+                <th>Ngôn ngữ</th>
                 <th>Ngày tạo</th>
             </tr>
             {% for record in history %}
             <tr>
                 <td>{{ record.transcription }}</td>
+                <td>{{ record.language|upper }}</td>
                 <td>{{ record.created_at }}</td>
             </tr>
             {% empty %}
